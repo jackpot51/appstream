@@ -18,37 +18,43 @@ use super::{
 /// `appdata.xml` file. It describes an application to the various stores out
 /// there on Linux.
 pub struct Component {
-    #[serde(default, rename = "type")]
+    #[serde(default, rename = "type", alias = "Type")]
     /// The component type.
     pub kind: ComponentKind,
     /// Unique identifier for this component.
+    #[serde(alias = "ID")]
     pub id: AppId,
     /// A human-readable name.
+    #[serde(alias = "Name")]
     pub name: TranslatableString,
 
+    //TODO: DEP-11 Requires
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Absolute requirements of the component. See
     /// <https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-relations>.
     pub requires: Vec<Requirement>,
 
+    //TODO: DEP-11 Recommends
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Recommended requirements of the component. See
     /// <https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-relations>.
     pub recommends: Vec<Requirement>,
 
+    //TODO: DEP-11 Supports
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Supported features of the component. See
     /// <https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-relations>.
     pub supports: Vec<Requirement>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "Summary")]
     /// A short summary of the component.
     pub summary: Option<TranslatableString>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "Description")]
     /// A long description of this component.
     pub description: Option<MarkupTranslatableString>,
 
+    //TODO: DEP-11 ProjectLicense
     #[serde(default, skip_serializing_if = "Option::is_none")]
     /// The license of the compoonent.
     pub project_license: Option<License>,
@@ -57,33 +63,37 @@ pub struct Component {
     /// The license the metainfo XML file released under.
     pub metadata_license: Option<License>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "ProjectGroup")]
     /// Identify the project with a specific upstream umbrella.
     /// Known values includes: GNOME, KDE, XFCE, MATE, LXDE.
     pub project_group: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "CompulsoryForDesktop")]
     /// Indicate for which desktop environment the component is essential for
     /// its functionality.
     pub compulsory_for_desktop: Option<String>,
 
+    //TODO: DEP-11 Extends
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// The various AppId that the current component extends.
     pub extends: Vec<AppId>,
 
+    //TODO: DEP-11 Icon
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// The icons of the component.
     pub icons: Vec<Icon>,
 
+    //TODO: DEP-11 Screenshots
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// The component screenshots, composed of either images, videos or both.
     pub screenshots: Vec<Screenshot>,
 
+    //TODO: DEP-11 Url
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Web URLs.
     pub urls: Vec<ProjectUrl>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "DeveloperName")]
     /// The developers or the projects responsible for the development of the
     /// project.
     pub developer_name: Option<TranslatableString>,
@@ -93,30 +103,34 @@ pub struct Component {
     /// The information should not be exposed to the user.
     pub update_contact: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(default, skip_serializing_if = "Vec::is_empty", alias = "Categories")]
     /// The categories this component is associated with.
     pub categories: Vec<Category>,
 
+    //TODO: DEP-11 Launchable
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Possible methods to launch the software.
     pub launchables: Vec<Launchable>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "Package")]
     /// The pkgname, a distributor thing.
     pub pkgname: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "SourcePackage")]
     /// The source pkgname, a distributor thing.
     pub source_pkgname: Option<String>,
 
+    //TODO: DEP-11 Bundles
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// 3rd-party sources to grab the component from.
     pub bundles: Vec<Bundle>,
 
+    //TODO: DEP-11 Releases
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Metainformation that describes the various releases.
     pub releases: Vec<Release>,
 
+    //TODO: DEP-11 Languages
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// The languages supported by the component.
     pub languages: Vec<Language>,
@@ -129,10 +143,12 @@ pub struct Component {
     /// Defines the "awesomeness" of a component.
     pub kudos: Vec<Kudo>,
 
+    //TODO: DEP-11 Keywords
     #[serde(default, skip_serializing_if = "Option::is_none")]
     /// A list of keywords, to help the user find the component easily.
     pub keywords: Option<TranslatableList>,
 
+    //TODO: DEP-11 ContentRating
     #[serde(default, skip_serializing_if = "Option::is_none")]
     /// Specifies the age rating of the component.
     pub content_rating: Option<ContentRating>,
@@ -145,6 +161,7 @@ pub struct Component {
     /// Specifies the translation domains.
     pub translations: Vec<Translation>,
 
+    //TODO: DEP-11 Suggests
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     /// Suggested components to install.
     pub suggestions: Vec<AppId>,

@@ -177,6 +177,7 @@ pub enum Category {
     /// A word processor.
     WordProcessor,
     /// 2D based graphical application.
+    #[serde(alias = "2DGraphics")]
     TwoDGraphics,
     /// Application for viewing, creating, or processing vector graphics.
     VectorGraphics,
@@ -184,6 +185,7 @@ pub enum Category {
     /// graphics.
     RasterGraphics,
     /// Application for viewing, creating, or processing 3-D graphics.
+    #[serde(alias = "3DGraphics")]
     ThreeDGraphics,
     /// Tool to scan a file/text.
     Scanning,
@@ -249,6 +251,7 @@ pub enum Category {
     /// Application to edit audio/video files.
     AudioVideoEditing,
     /// Application to play audio/video files.
+    #[serde(alias = "player")]
     Player,
     /// Application to record audio/video files.
     Recorder,
@@ -405,6 +408,16 @@ pub enum Category {
     /// A shell (an actual specific shell such as bash or tcsh, not a
     /// TerminalEmulator).
     Shell,
+    /// Matrix
+    Matrix,
+    /// Internet
+    Internet,
+    /// Instant Messenger
+    InstantMessenger,
+    /// Terminal
+    Terminal,
+    /// Media
+    Media,
     #[strum(default)]
     #[doc(hidden)]
     Unknown(String),
