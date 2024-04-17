@@ -930,7 +930,7 @@ impl TryFrom<&Element> for Requirement {
             }
             // TODO Implement remaining items in
             // https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-relations
-            "hardware" | "firmware" | "memory" | "kernel" | "modalias" => Ok(Requirement::Other),
+            "hardware" | "firmware" | "memory" | "kernel" | "modalias" | "internet" => Ok(Requirement::Other),
             _ => Err(ParseError::invalid_tag(&e.name)),
         }
     }
