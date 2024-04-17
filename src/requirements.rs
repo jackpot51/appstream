@@ -178,7 +178,7 @@ impl TryFrom<&str> for Control {
             "tablet" => Ok(Self::Tablet),
             "touch" => Ok(Self::Touch),
             "gamepad" => Ok(Self::Gamepad),
-            "tv-remove" => Ok(Self::TvRemote),
+            "tv-remote" => Ok(Self::TvRemote),
             "voice" => Ok(Self::Voice),
             "vision" => Ok(Self::Vision),
             _ => Err(ParseError::invalid_value(string, "type", "compare")),
