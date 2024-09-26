@@ -54,8 +54,7 @@ pub struct Component {
     /// A long description of this component.
     pub description: Option<MarkupTranslatableString>,
 
-    //TODO: DEP-11 ProjectLicense
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "ProjectLicense")]
     /// The license of the compoonent.
     pub project_license: Option<License>,
 
