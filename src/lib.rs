@@ -110,6 +110,7 @@ pub mod builders;
 mod collection;
 mod component;
 mod content_rating;
+mod developer;
 /// Various enumerations used in the appstream types.
 pub mod enums;
 mod error;
@@ -125,6 +126,7 @@ pub use app_id::AppId;
 pub use collection::Collection;
 pub use component::Component;
 pub use content_rating::ContentRating;
+pub use developer::Developer;
 pub use error::{ContextParseError, ParseError};
 pub use language::Language;
 pub use license::License;

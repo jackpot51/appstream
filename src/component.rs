@@ -10,8 +10,8 @@ use super::{
         Bundle, Category, ComponentKind, Icon, Kudo, Launchable, ProjectUrl, Provide, Translation,
     },
     error::ParseError,
-    AppId, ContentRating, Language, License, MarkupTranslatableString, Release, Requirement,
-    Screenshot, TranslatableList, TranslatableString,
+    AppId, ContentRating, Developer, Language, License, MarkupTranslatableString, Release,
+    Requirement, Screenshot, TranslatableList, TranslatableString,
 };
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 /// A component is wrapper around a `metainfo.xml` file or previously an
@@ -92,9 +92,14 @@ pub struct Component {
     /// Web URLs.
     pub urls: Vec<ProjectUrl>,
 
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "Developer")]
+    /// The developer or project responsible for the component.
+    pub developer: Option<Developer>,
+
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "DeveloperName")]
     /// The developers or the projects responsible for the development of the
-    /// project.
+    /// project. Deprecated in AppStream 1.0 in favour of
+    /// [`Component::developer`].
     pub developer_name: Option<TranslatableString>,
 
     #[serde(skip_serializing_if = "Option::is_none")]

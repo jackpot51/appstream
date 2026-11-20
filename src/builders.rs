@@ -4,9 +4,9 @@ use chrono::{DateTime, Utc};
 use url::Url;
 
 use super::{
-    collection::Collection, component::Component, enums::*, AppId, Artifact, ContentRating, Image,
-    Language, License, MarkupTranslatableString, Release, Requirement, Screenshot,
-    TranslatableList, TranslatableString, Video,
+    collection::Collection, component::Component, enums::*, AppId, Artifact, ContentRating,
+    Developer, Image, Language, License, MarkupTranslatableString, Release, Requirement,
+    Screenshot, TranslatableList, TranslatableString, Video,
 };
 
 #[derive(Default, Debug)]
@@ -176,8 +176,9 @@ pub struct ComponentBuilder {
     pub screenshots: Vec<Screenshot>,
     /// Web URLs.
     pub urls: Vec<ProjectUrl>,
-    /// The developers or the projects responsible for the development of the
-    /// project.
+    /// The developer or project responsible for the component.
+    pub developer: Option<Developer>,
+    /// The developer's name (deprecated `developer_name` tag).
     pub developer_name: Option<TranslatableString>,
     /// Used by distributors to contact the project.
     pub update_contact: Option<String>,
@@ -250,7 +251,14 @@ impl ComponentBuilder {
         self
     }
 
-    /// Sets the developer name.
+    /// Sets the developer.
+    #[must_use]
+    pub fn developer(mut self, developer: Developer) -> Self {
+        self.developer = Some(developer);
+        self
+    }
+
+    /// Sets the developer name (deprecated `developer_name` tag).
     #[must_use]
     pub fn developer_name(mut self, developer_name: TranslatableString) -> Self {
         if !developer_name.is_empty() {
@@ -465,6 +473,25 @@ impl ComponentBuilder {
     /// Constructs a `Component`.
     #[must_use]
     pub fn build(self) -> Component {
+        // Mirroring libappstream's logic here
+        let (developer, developer_name) = match (self.developer, self.developer_name) {
+            (None, None) => (None, None),
+            (None, Some(legacy)) => (
+                Some(Developer {
+                    id: None,
+                    name: legacy.clone(),
+                }),
+                Some(legacy),
+            ),
+            (Some(mut developer), legacy) => {
+                for (locale, name) in legacy.into_iter().flat_map(|l| l.0) {
+                    developer.name.0.entry(locale).or_insert(name);
+                }
+                let name = (!developer.name.is_empty()).then(|| developer.name.clone());
+                (Some(developer), name)
+            }
+        };
+
         Component {
             kind: self.kind,
             id: self.id.expect("An 'id' is required"),
@@ -482,7 +509,8 @@ impl ComponentBuilder {
             icons: self.icons,
             screenshots: self.screenshots,
             urls: self.urls,
-            developer_name: self.developer_name,
+            developer,
+            developer_name,
             update_contact: self.update_contact,
             categories: self.categories,
             launchables: self.launchables,

@@ -16,7 +16,7 @@ use super::{
     },
     error::{CollectionParseError, ContextParseError, ParseError},
     requirements::{Control, DisplayLength, DisplayLengthValue, Rel, Side},
-    AppId, Artifact, Collection, Component, ContentRating, Image, Language, License,
+    AppId, Artifact, Collection, Component, ContentRating, Developer, Image, Language, License,
     MarkupTranslatableString, Release, Requirement, Screenshot, TranslatableList,
     TranslatableString, Video,
 };
@@ -210,6 +210,9 @@ impl TryFrom<&Element> for Component {
                     "name" => name.add_for_element(e),
                     "summary" => summary.add_for_element(e),
                     "developer_name" => developer_name.add_for_element(e),
+                    "developer" => {
+                        component = component.developer(Developer::try_from(e)?);
+                    }
                     "description" => description.add_for_element(e),
                     "project_license" => {
                         component = component.project_license(License::try_from(e)?);
@@ -473,6 +476,25 @@ impl TryFrom<&Element> for ContentAttribute {
             },
             None => Err(ParseError::missing_attribute("id", "content-attribute")),
         }
+    }
+}
+
+impl TryFrom<&Element> for Developer {
+    type Error = ParseError;
+
+    fn try_from(e: &Element) -> Result<Self, Self::Error> {
+        let mut name = TranslatableString::default();
+        for child in e.children.iter() {
+            if let XMLNode::Element(element) = child {
+                if &*element.name == "name" {
+                    name.add_for_element(element);
+                }
+            }
+        }
+        Ok(Self {
+            id: e.attributes.get("id").cloned(),
+            name,
+        })
     }
 }
 
